@@ -6,7 +6,7 @@
 <br>
 <br>
 
-<a href="https://zzv92.herokuapp.com/"> Inschrijfformulier </a>
+<a href="https://zzv92.herokuapp.com/formulier.php"> Inschrijfformulier </a>
 
 
 </body>
