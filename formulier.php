@@ -18,6 +18,13 @@
 
 <form action="welcome.php" method="post">
 
+Voornaam: <input type="text" name="voornaam"><br>
+<br>
+<br>
+Achternaam: <input type="text" name="achternaam"><br>
+<br>
+<br>
+
 Leeftijd: <input type="text" name="leeftijd"><br>
 <br>
 <br>
