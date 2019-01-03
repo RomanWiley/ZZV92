@@ -28,15 +28,23 @@ Achternaam: <input type="text" name="achternaam"><br>
 Leeftijd: <input type="text" name="leeftijd"><br>
 <br>
 <br>
-
-  <input type="radio" name="geslacht" value="man" checked> Man<br>
-  <input type="radio" name="geslacht" value="vrouw"> Vrouw<br>
-  <input type="radio" name="geslacht" value="anders"> Anders<br><br>
+Geslacht<br>
+  <input type="radio" name="geslacht" value="man" checked> Man
+  <input type="radio" name="geslacht" value="vrouw"> Vrouw
+  <input type="radio" name="geslacht" value="anders"> Anders
 <br>
 <br>
 Emailadres: <input type="text" name="emailadres"><br>
 <br>
 <br>
+Betaalperiode<br>
+<input type="radio" name="betaalperiode" value="maand"> maand
+<input type="radio" name="betaalperiode" value="kwartaal"> kwartaal
+<input type="radio" name="betaalperiode" value="jaar"> jaar
+<br>
+<br>
+<br>
+
 <input type="submit" >
 
 </form>
