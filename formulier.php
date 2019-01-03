@@ -44,6 +44,10 @@ Betaalperiode<br>
 <br>
 <br>
 <br>
+Rekeningnummer: <input type="text" name="rekeningnummer"><br>
+<br>
+<br>
+
 
 <input type="submit" >
 
