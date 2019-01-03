@@ -27,7 +27,9 @@ Leeftijd: <input type="text" name="leeftijd"><br>
   <input type="radio" name="geslacht" value="anders"> Anders<br><br>
 <br>
 <br>
-
+Emailadres: <input type="text" name="emailadres"><br>
+<br>
+<br>
 <input type="submit" >
 
 </form>
