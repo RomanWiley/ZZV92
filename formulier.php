@@ -43,10 +43,15 @@ Betaalperiode<br>
 <input type="radio" name="betaalperiode" value="jaar"> jaar
 <br>
 <br>
+Betaalwijze<br>
+<input type="radio" name="betaalwijze" value="incasso"> incasso
+<input type="radio" name="betaalwijze" value="contant"> contant
+<br>
 <br>
 Rekeningnummer: <input type="text" name="rekeningnummer"><br>
 <br>
 <br>
+
 
 
 <input type="submit" >
