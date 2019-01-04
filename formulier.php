@@ -12,16 +12,27 @@
 
 <body>
 <?php
+
 // define variables and set to empty values
 $fnameErr = $lnameErr = $ageErr = $emailErr = $genderErr = "";
 $betaalPeriodeErr = $betaalWijzeErr = "";
 
-$fname = $lname = $age = $email = $geslacht = $reknr = "";
+$fname = $lname = $age = $email = $gender = $reknr = "";
 $betaalPeriode = $betaalWijze = "";
 
 $maandBedrag = 25;
 $kwartaalBedrag = 75;
 $jaarBedrag = 300;
+
+
+
+
+
+// let op: hieronder mag ik er vanuit gaan dat:
+// verlichte zijn ingevuld
+// er zit geen rommel in de input
+// weet dat ...
+
 
 
 
@@ -72,12 +83,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $betaalPeriode = test_input($_POST["betaalperiode"]);
   }
 
+  echo $betaalWijze;
+  echo "<BR>";
+  echo $betaalPeriode;
+
 /* betaalwijze */
   if (empty($_POST["betaalwijze"])) {
     $betaalWijzeErr = "keuze betaalwijze is verplicht";
   } else {
-    $betaalWijze = test_input($_POST["betaalwijze"]);
-  }
+    $betaalWijze = $_POST["betaalwijze"];
+    if ($betaalWijze == 'contant') {
+      if ($betaalPeriode != 'jaar') {
+        $betaalWijzeErr  = "Bij contante betaling is betalen per jaar verplicht.";
+
+      }
+    }
+  
+    }
+  
+  echo $betaalWijzeErr;
+  
 
 /* geslachts keuze */
 
@@ -101,8 +126,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
   
 
+} // sluit check op post
 
-}
 
 // hier opschoning invoer
 function test_input($data) {
@@ -142,6 +167,8 @@ Emailadres: <input type="text" name="emailadres">
 Betaalperiode<br>
 <input type="radio" name="betaalperiode" value="maand"> maand
 <input type="radio" name="betaalperiode" value="kwartaal"> kwartaal
+<!-- Als het jaar niet geselecteerd is dan mag de gebruiker niet kiezen voor contant-->
+<!-- Word contant wel gekozen laat een error zien met de tekst -->
 <input type="radio" name="betaalperiode" value="jaar"> jaar
 <span class="error">* <?php echo $betaalPeriodeErr;?></span>
 <br><br>
