@@ -132,12 +132,28 @@ Rekeningnummer: <input type="number" name="rekeningnummer">
 </form>
 
 <?php
+/*
+60+? 10% korting
+basis 25 euro per maand
+vrouwen de helft
+voornaam 5 letters, korter? per letter 5 extra, ook per maand
+per maand hele tarief per kwartaal 1% korting, per jaar 3%
+in 2018 100 index
+2019 2,5%
+altijd hoogste enkelvoudige korting
+output betaling per maand/kwartaal/jaar
+betaling per incasso, per jaar mag ook overmaken
+*/
+
 echo "<h2>Your Input:</h2>";
 echo $fname . " " . $lname;
 echo "<br>";
 echo $email;
 echo "<br>";
-echo $gender;
+echo $gender; 
+if ($gender == "vrouw") {
+  echo " Een vrouw krijgt 50% korting";
+}
 ?>
  </body>
 
