@@ -5,14 +5,16 @@
 <head>
 
     <meta charset="UTF-8">
-
+    <style>
+    .error {color: #FF0000;}
+    </style>
  </head>
 
 <body>
 <?php
 // define variables and set to empty values
 $fnameErr = $lnameErr = $emailErr = $genderErr = "";
-$fname = $lname= $email = $geslacht = "";
+$fname = $lname= $email = $geslacht = $reknr = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["voornaam"])) {
@@ -34,7 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $lnameErr = "Alleen letters en spaties toegestaan";
       }
     }
-    
+
+    if (empty($_POST["leeftijd"])) {
+      $genderErr = "Leeftijd is verplicht";
+    } else {
+      $gender = test_input($_POST["leeftijd"]);
+    }
+      
   if (empty($_POST["emailadres"])) {
     $emailErr = "Emailadres is verplicht";
   } else {
@@ -50,6 +58,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $gender = test_input($_POST["geslacht"]);
   }
+
+  if (empty($_POST["rekeningnummer"])) {
+    $reknrErr = "Rekeningnummer is verplicht";
+  } else {
+    $reknrErr = test_input($_POST["rekeningnummer"]);
+  // check if name only contains letters and whitespace
+  if (1 == 0 /*hier check op nummers en lengte*/) {
+    $reknrErr = "Alleen 9 cijfers toegestaan";
+  }
+}
+  
+
+
 }
 
 // hier opschoning invoer
@@ -60,52 +81,45 @@ function test_input($data) {
   return $data;
 }
 ?>
-<br>
+
 <h2>Inschrijfformulier ZZV'92</h2>
-<p><span class="error">* required field</span></p>
+<p><span class="error">* Verplichte invoer</span></p>
 <br>
 <br>
-<br>
-// meldingen komen in het formulier zelf, geen geschakel tussen resultaat en invoer
+<!-- meldingen komen in het formulier zelf, geen geschakel tussen resultaat en invoer -->
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
 
-Voornaam: <input type="text" name="voornaam"><br>
+Voornaam: <input type="text" name="voornaam">
 <span class="error">* <?php echo $fnameErr;?></span>
 <br><br>
-Achternaam: <input type="text" name="achternaam"><br>
-<span class="error">* <?php echo $lnameErr;?></span><br>
-<br>
+Achternaam: <input type="text" name="achternaam">
+<span class="error">* <?php echo $lnameErr;?></span>
+<br><br>
 
-Leeftijd: <input type="text" name="leeftijd"><br>
-<br>
-<br>
+Leeftijd: <input type="text" name="leeftijd">
+<span class="error">* <?php echo $ageErr;?></span>
+<br><br>
 Geslacht<br>
   <input type="radio" name="geslacht" value="man" checked> Man
   <input type="radio" name="geslacht" value="vrouw"> Vrouw
-  <input type="radio" name="geslacht" value="anders"> Anders<br>
-  <span class="error">* <?php echo $genderErr;?></span>
-<br>
-<br>
-Emailadres: <input type="text" name="emailadres"><br>
+  <input type="radio" name="geslacht" value="anders"> Anders
+<span class="error">* <?php echo $genderErr;?></span>
+<br><br>
+Emailadres: <input type="text" name="emailadres">
 <span class="error">* <?php echo $emailErr;?></span>
-<br>
-<br>
+<br><br>
 Betaalperiode<br>
 <input type="radio" name="betaalperiode" value="maand"> maand
 <input type="radio" name="betaalperiode" value="kwartaal"> kwartaal
 <input type="radio" name="betaalperiode" value="jaar"> jaar
-<br>
-<br>
+<br><br>
 Betaalwijze<br>
 <input type="radio" name="betaalwijze" value="incasso"> incasso
 <input type="radio" name="betaalwijze" value="contant"> contant
-<br>
-<br>
-Rekeningnummer: <input type="text" name="rekeningnummer"><br>
-<br>
-<br>
-
-
+<br><br>
+Rekeningnummer: <input type="text" name="rekeningnummer">
+<span class="error">* <?php echo $reknrErr;?></span>
+<br><br>
 
 <input type="submit" >
 
