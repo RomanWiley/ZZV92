@@ -13,10 +13,14 @@
 <body>
 <?php
 // define variables and set to empty values
-$fnameErr = $lnameErr = $emailErr = $genderErr = "";
-$fname = $lname= $email = $geslacht = $reknr = "";
+$fnameErr = $lnameErr = $ageErr = $emailErr = $genderErr = "";
+$fname = $lname = $age = $email = $geslacht = $reknr = "";
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+  $var_reknr = $_POST["rekeningnummer"];
+
   if (empty($_POST["voornaam"])) {
     $fnameErr = "Voornaam is verplicht";
   } else {
@@ -38,9 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($_POST["leeftijd"])) {
-      $genderErr = "Leeftijd is verplicht";
+      $ageErr = "Leeftijd is verplicht";
     } else {
-      $gender = test_input($_POST["leeftijd"]);
+      $age = test_input($_POST["leeftijd"]);
     }
       
   if (empty($_POST["emailadres"])) {
@@ -59,13 +63,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = test_input($_POST["geslacht"]);
   }
 
-  if (empty($_POST["rekeningnummer"])) {
+  if (empty($var_reknr)) {
     $reknrErr = "Rekeningnummer is verplicht";
   } else {
-    $reknrErr = test_input($_POST["rekeningnummer"]);
+    $reknr = test_input($var_reknr);
   // check if name only contains letters and whitespace
-  if (1 == 0 /*hier check op nummers en lengte*/) {
+  /*hier check op nummers en lengte*/
+  if (strlen($var_reknr )!= 9 ) {
     $reknrErr = "Alleen 9 cijfers toegestaan";
+
   }
 }
   
@@ -117,7 +123,7 @@ Betaalwijze<br>
 <input type="radio" name="betaalwijze" value="incasso"> incasso
 <input type="radio" name="betaalwijze" value="contant"> contant
 <br><br>
-Rekeningnummer: <input type="text" name="rekeningnummer">
+Rekeningnummer: <input type="number" name="rekeningnummer">
 <span class="error">* <?php echo $reknrErr;?></span>
 <br><br>
 
