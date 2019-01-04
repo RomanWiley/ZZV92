@@ -23,16 +23,14 @@ $betaalPeriode = $betaalWijze = "";
 $maandBedrag = 25;
 $kwartaalBedrag = 75;
 $jaarBedrag = 300;
-
-
-
+$indexJaar=2018;
+$korting=0; // korting in procenten
 
 
 // let op: hieronder mag ik er vanuit gaan dat:
 // verlichte zijn ingevuld
 // er zit geen rommel in de input
 // weet dat ...
-
 
 
 
@@ -64,6 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $ageErr = "Leeftijd is verplicht";
     } else {
       $age = test_input($_POST["leeftijd"]);
+      if ($_POST["leeftijd"] >= 60){
+
+        $korting = 10;
+      }
     }
       
   if (empty($_POST["emailadres"])) {
@@ -83,9 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $betaalPeriode = test_input($_POST["betaalperiode"]);
   }
 
-  echo $betaalWijze;
-  echo "<BR>";
-  echo $betaalPeriode;
 
 /* betaalwijze */
   if (empty($_POST["betaalwijze"])) {
@@ -100,9 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   
     }
-  
-  echo $betaalWijzeErr;
-  
+ 
 
 /* geslachts keuze */
 
@@ -208,6 +205,8 @@ echo $gender;
 if ($gender == "vrouw") {
   echo " Een vrouw krijgt 50% korting";
 }
+echo "het jaarbedrag is: Euro " . ($jaarBedrag * ((100 - $korting)/100)) ;
+
 ?>
  </body>
 
