@@ -14,7 +14,15 @@
 <?php
 // define variables and set to empty values
 $fnameErr = $lnameErr = $ageErr = $emailErr = $genderErr = "";
+$betaalPeriodeErr = $betaalWijzeErr = "";
+
 $fname = $lname = $age = $email = $geslacht = $reknr = "";
+$betaalPeriode = $betaalWijze = "";
+
+$maandBedrag = 25;
+$kwartaalBedrag = 75;
+$jaarBedrag = 300;
+
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -57,11 +65,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
+/* betaalperiode */
+  if (empty($_POST["betaalperiode"])) {
+    $betaalPeriodeErr = "invoer betaalperiode is verplicht";
+  } else {
+    $betaalPeriode = test_input($_POST["betaalperiode"]);
+  }
+
+/* betaalwijze */
+  if (empty($_POST["betaalwijze"])) {
+    $betaalWijzeErr = "keuze betaalwijze is verplicht";
+  } else {
+    $betaalWijze = test_input($_POST["betaalwijze"]);
+  }
+
+/* geslachts keuze */
+
   if (empty($_POST["geslacht"])) {
     $genderErr = "Geslacht is verplicht";
   } else {
     $gender = test_input($_POST["geslacht"]);
   }
+
 
   if (empty($var_reknr)) {
     $reknrErr = "Rekeningnummer is verplicht";
@@ -118,10 +143,12 @@ Betaalperiode<br>
 <input type="radio" name="betaalperiode" value="maand"> maand
 <input type="radio" name="betaalperiode" value="kwartaal"> kwartaal
 <input type="radio" name="betaalperiode" value="jaar"> jaar
+<span class="error">* <?php echo $betaalPeriodeErr;?></span>
 <br><br>
 Betaalwijze<br>
 <input type="radio" name="betaalwijze" value="incasso"> incasso
 <input type="radio" name="betaalwijze" value="contant"> contant
+<span class="error">* <?php echo $betaalWijzeErr;?></span>
 <br><br>
 Rekeningnummer: <input type="number" name="rekeningnummer">
 <span class="error">* <?php echo $reknrErr;?></span>
