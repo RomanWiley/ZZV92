@@ -22,9 +22,23 @@ $betaalPeriode = $betaalWijze = "";
 
 $maandBedrag = 25;
 $kwartaalBedrag = 75;
-$jaarBedrag = 300;
-$indexJaar=2018;
-$korting=0; // korting in procenten
+$jaarbedrag = 300;
+$indexJaar = 2018;
+$huidigJaar = 2019;
+$indexBedrag = $jaarbedrag + ($jaarbedrag * (($huidigJaar-$indexJaar)*.025));
+$korting = 0; // korting in procenten
+$toeslag = 0;
+$leeftijdsKorting = 10;
+$leeftijdsGrens = 60;
+
+$post_fname = $_POST["voornaam"]; // VRAAG; TEST_INPUT HIER DOEN??
+$post_lname = $_POST["achternaam"];
+$post_reknr = $_POST["rekeningnummer"];
+$post_age = $_POST["leeftijd"];
+$post_gender = $_POST["geslacht"];
+$post_email = $_POST["emailadres"];
+$post_betaalPeriode = $_POST["betaalperiode"];
+$post_betaalWijze = $_POST["betaalwijze"];
 
 
 // let op: hieronder mag ik er vanuit gaan dat:
@@ -36,42 +50,53 @@ $korting=0; // korting in procenten
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  $var_reknr = $_POST["rekeningnummer"];
-
-  if (empty($_POST["voornaam"])) {
+  if (empty($post_fname)) {
     $fnameErr = "Voornaam is verplicht";
   } else {
-    $fname = test_input($_POST["voornaam"]);
+    $fname = test_input($post_fname);
     // check if name only contains letters and whitespace
     if (!preg_match("/^[a-zA-Z ]*$/",$fname)) {
       $fnameErr = "Alleen letters en spaties toegestaan";
     }
+    if (strlen($fname) < 5){
+      $toeslag = 5 * (5 - strlen($fname));
+            
+    }
   }
 
-    if (empty($_POST["achternaam"])) {
+    if (empty($post_lname)) {
       $lnameErr = "Achternaam is verplicht";
     } else {
-      $lname = test_input($_POST["achternaam"]);
+      $lname = test_input($post_lname);
       // check if name only contains letters and whitespace
       if (!preg_match("/^[a-zA-Z ]*$/",$lname)) {
         $lnameErr = "Alleen letters en spaties toegestaan";
       }
     }
 
-    if (empty($_POST["leeftijd"])) {
+    if (empty($post_age)) {
       $ageErr = "Leeftijd is verplicht";
     } else {
-      $age = test_input($_POST["leeftijd"]);
-      if ($_POST["leeftijd"] >= 60){
-
-        $korting = 10;
+      $age = test_input($post_age);
+      if ($post_age >= $leeftijdsGrens && $korting < $leeftijdsKorting){
+        $korting = $leeftijdsKorting;
       }
     }
-      
-  if (empty($_POST["emailadres"])) {
+
+ /* geslachts keuze */
+  if (empty($post_gender)) {
+    $genderErr = "Geslacht is verplicht";
+  } else {
+    $gender = test_input($post_gender);
+    if ($p="vrouw" && $korting < 50){
+      $korting = 50;
+    }
+  }
+     
+  if (empty($post_email)) {
     $emailErr = "Emailadres is verplicht";
   } else {
-    $email = test_input($_POST["emailadres"]);
+    $email = test_input($post_email);
     // check if e-mail address is well-formed
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $emailErr = "Ongeldig emailadres";
@@ -79,52 +104,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
 /* betaalperiode */
-  if (empty($_POST["betaalperiode"])) {
+  if (empty($post_betaalPeriode)) {
     $betaalPeriodeErr = "invoer betaalperiode is verplicht";
   } else {
-    $betaalPeriode = test_input($_POST["betaalperiode"]);
+    $betaalPeriode = $post_betaalPeriode;
   }
 
-
 /* betaalwijze */
-  if (empty($_POST["betaalwijze"])) {
+  if (empty($post_betaalWijze)) {
     $betaalWijzeErr = "keuze betaalwijze is verplicht";
   } else {
-    $betaalWijze = $_POST["betaalwijze"];
+    $betaalWijze = $post_betaalWijze;
     if ($betaalWijze == 'contant') {
       if ($betaalPeriode != 'jaar') {
         $betaalWijzeErr  = "Bij contante betaling is betalen per jaar verplicht.";
 
       }
     }
-  
     }
- 
 
-/* geslachts keuze */
-
-  if (empty($_POST["geslacht"])) {
-    $genderErr = "Geslacht is verplicht";
-  } else {
-    $gender = test_input($_POST["geslacht"]);
-  }
-
-
-  if (empty($var_reknr)) {
+    /* rekeningnummer */
+  if (empty($post_reknr)) {
     $reknrErr = "Rekeningnummer is verplicht";
   } else {
-    $reknr = test_input($var_reknr);
+    $reknr = test_input($post_reknr);
   // check if name only contains letters and whitespace
   /*hier check op nummers en lengte*/
-  if (strlen($var_reknr )!= 9 ) {
+  if (strlen($post_reknr )!= 9 ) {
     $reknrErr = "Alleen 9 cijfers toegestaan";
-
   }
 }
   
 
 } // sluit check op post
-
 
 // hier opschoning invoer
 function test_input($data) {
@@ -184,28 +196,55 @@ Rekeningnummer: <input type="number" name="rekeningnummer">
 
 <?php
 /*
-60+? 10% korting
-basis 25 euro per maand
-vrouwen de helft
+-- 60+? 10% korting
+-- basis 25 euro per maand
+-- vrouwen de helft
 voornaam 5 letters, korter? per letter 5 extra, ook per maand
 per maand hele tarief per kwartaal 1% korting, per jaar 3%
 in 2018 100 index
-2019 2,5%
+** 2019 2,5% (elk jaar een indexatie van 2,5%)
 altijd hoogste enkelvoudige korting
 output betaling per maand/kwartaal/jaar
 betaling per incasso, per jaar mag ook overmaken
 */
 
 echo "<h2>Your Input:</h2>";
-echo $fname . " " . $lname;
-echo "<br>";
-echo $email;
-echo "<br>";
-echo $gender; 
-if ($gender == "vrouw") {
-  echo " Een vrouw krijgt 50% korting";
+echo "Naam: " . $fname . " " . $lname;
+if ($toeslag > 0){
+  echo " (te korte voornaam) Toeslag van € " . $toeslag . " per maand";
 }
-echo "het jaarbedrag is: Euro " . ($jaarBedrag * ((100 - $korting)/100)) ;
+
+echo "<br>Leeftijd: " . $age . "  ";
+if ($age >= $leeftijdsGrens){
+  echo " Iemand van " . $leeftijdsGrens . " jaar of ouder krijgt " . $leeftijdsKorting . "% korting";
+}
+
+echo "<br>Geslacht: ". $gender . " "; 
+if ($gender == "vrouw") {
+  echo " Een vrouw krijgt 50% korting <br>";
+}
+
+echo "<br>Emailadres: " . $email .  "<br>";
+echo "Betaling per " . $betaalPeriode  . ", " . $betaalWijze . "<br>";
+echo "Rekeningnummer " . $reknr . "<br><br>";
+
+$jaarContributie = number_format(round($indexBedrag,2),2);
+
+echo "het geindezeerde jaarbedrag zonder korting is: € " . $jaarContributie . " in " . $huidigJaar . "<br>";
+echo "het jaarbedrag is: € " . number_format($jaarContributie + ($toeslag * 12),2);
+
+echo "<br>De door u gekozen betaalperiode en -wijze resulteert in dit termijnbedrag: ";
+switch ($betaalPeriode) {
+case "maand":
+echo number_format(round(($jaarContributie / 12),2) + $toeslag,2) . " per maand";
+break;
+case "kwartaal":
+echo number_format(round((($jaarContributie + ($toeslag * 12)) / 4),2),2) . " per kwartaal";
+break;
+case "jaar":
+echo "zie boven";
+break;
+}
 
 ?>
  </body>
