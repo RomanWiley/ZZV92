@@ -23,6 +23,7 @@ $betaalPeriode = $betaalWijze = "";
 $maandBedrag = 25;
 $kwartaalBedrag = 75;
 $jaarbedrag = 300;
+$nettoContributie = 0;
 $indexJaar = 2018;
 $huidigJaar = 2019;
 $indexBedrag = $jaarbedrag + ($jaarbedrag * (($huidigJaar-$indexJaar)*.025));
@@ -30,6 +31,7 @@ $korting = 0; // korting in procenten
 $toeslag = 0;
 $leeftijdsKorting = 10;
 $leeftijdsGrens = 60;
+$vrouwenKorting = 50; // korting in % voor vrouwen
 
 $post_fname = $_POST["voornaam"]; // VRAAG; TEST_INPUT HIER DOEN??
 $post_lname = $_POST["achternaam"];
@@ -88,8 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $genderErr = "Geslacht is verplicht";
   } else {
     $gender = test_input($post_gender);
-    if ($p="vrouw" && $korting < 50){
-      $korting = 50;
+    if ($post_gender == "vrouw" && $korting < $vrouwenKorting){
+      $korting = $vrouwenKorting;
     }
   }
      
@@ -199,12 +201,12 @@ Rekeningnummer: <input type="number" name="rekeningnummer">
 -- 60+? 10% korting
 -- basis 25 euro per maand
 -- vrouwen de helft
-voornaam 5 letters, korter? per letter 5 extra, ook per maand
-per maand hele tarief per kwartaal 1% korting, per jaar 3%
+-- voornaam 5 letters, korter? per letter 5 extra, ook per maand, toeslag NA korting toepassen
+-- per maand hele tarief per kwartaal 1% korting, per jaar 3%
 in 2018 100 index
 ** 2019 2,5% (elk jaar een indexatie van 2,5%)
 altijd hoogste enkelvoudige korting
-output betaling per maand/kwartaal/jaar
+-- output betaling per maand/kwartaal/jaar
 betaling per incasso, per jaar mag ook overmaken
 */
 
@@ -228,21 +230,23 @@ echo "<br>Emailadres: " . $email .  "<br>";
 echo "Betaling per " . $betaalPeriode  . ", " . $betaalWijze . "<br>";
 echo "Rekeningnummer " . $reknr . "<br><br>";
 
-$jaarContributie = number_format(round($indexBedrag,2),2);
+$jaarContributie = number_format(round($indexBedrag,2),2); // berekening jaarbedrag zonder korting ZONDER toeslagen
+$nettoContributie = number_format(round($jaarContributie * (1-($korting/100)),2),2);
 
-echo "het geindezeerde jaarbedrag zonder korting is: € " . $jaarContributie . " in " . $huidigJaar . "<br>";
-echo "het jaarbedrag is: € " . number_format($jaarContributie + ($toeslag * 12),2);
+echo "het geindexeerde jaarbedrag zonder korting is: € " . $jaarContributie . " in " . $huidigJaar . "<br>";
+echo "Contributie na korting op jaarbasis: " . $nettoContributie . "<br>";
+echo "het jaarbedrag na toeslagen is: € " . number_format($nettoContributie + ($toeslag * 12),2);
 
 echo "<br>De door u gekozen betaalperiode en -wijze resulteert in dit termijnbedrag: ";
 switch ($betaalPeriode) {
 case "maand":
-echo number_format(round(($jaarContributie / 12),2) + $toeslag,2) . " per maand";
+echo "€ " . number_format(round(($nettoContributie / 12),2) + $toeslag,2) . " per maand";
 break;
 case "kwartaal":
-echo number_format(round((($jaarContributie + ($toeslag * 12)) / 4),2),2) . " per kwartaal";
+echo "€ " . number_format(round((($nettoContributie + ($toeslag * 12)) / 4),2),2) . " per kwartaal";
 break;
 case "jaar":
-echo "zie boven";
+echo "het jaarbedrag is: € " . number_format($jaarContributie + ($toeslag * 12),2);
 break;
 }
 
