@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $fnameErr = "Alleen letters en spaties toegestaan";
     }
     if (strlen($fname) < 5){
-      $toeslag = 5 * (5 - strlen($fname));
+      $toeslag = 1 * (5 - strlen($fname));
             
     }
   }
