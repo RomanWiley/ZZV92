@@ -2,7 +2,7 @@
 
 <head>
 
-<title> Opdracht 07, databaseconnection maken </title>
+<title> dbproducttoevoegen </title>
 
 </head>
 
@@ -14,7 +14,7 @@ Echo "Connectie wordt gemaakt <BR>";
 // maak de connectie
 
 try {
-    $conn = new PDO("mysql:host=127.0.0.1;dbname=project1","root","");
+    $conn = new PDO("mysql:host=127.0.0.1;dbname=webshop","root","");
 } catch (PDOException $e) {
     phpinfo();
     die($e->getMessage());
